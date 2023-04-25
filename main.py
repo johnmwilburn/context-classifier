@@ -119,7 +119,7 @@ inputs = tokenizer(text_1, text_2, return_tensors='pt', truncation=True)
 outputs = model(**inputs.to('cuda'))
 predictions = torch.argmax(outputs.logits).item()
 
-torch.save(model)
+torch.save(model, 'model.pt')
 
 if predictions == 0:
     print("The two pieces of text are not in context.")
