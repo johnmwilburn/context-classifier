@@ -82,7 +82,7 @@ model.to('cuda')
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16)
 
-optimizer = AdamW(model.parameters(), lr=5e-5)
+optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
 
 for epoch in range(3): # increase range for training
     model.train()
