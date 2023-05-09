@@ -120,6 +120,10 @@ predictions = torch.argmax(outputs.logits).item()
 
 torch.save(model, 'model.pt')
 
+print("Passing the following two pieces of text to the model:" )
+print(text_1)
+print(text_2)
+
 if predictions == 0:
     print("The two pieces of text are not in context.")
 else:
