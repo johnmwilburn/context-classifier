@@ -74,7 +74,7 @@ class CustomDataset(torch.utils.data.Dataset):
 train_dataset = CustomDataset(train_encodings, train_df['in_context'].tolist())
 test_dataset = CustomDataset(test_encodings, test_df['in_context'].tolist())
 
-model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=1)
+model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=2)
 model.to('cuda')
 
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
