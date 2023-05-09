@@ -1,11 +1,13 @@
 from convokit import Corpus, download
 corpus = Corpus(filename=download("conversations-gone-awry-corpus"))
 
-import pandas as pd
-import numpy as np
-from itertools import combinations
-from sklearn.utils import resample
 import random
+from itertools import combinations
+import pandas as pd
+import torch
+from sklearn.utils import resample
+from sklearn.model_selection import train_test_split
+from transformers import BertTokenizer, BertForSequenceClassification, AdamW
 
 # Load data
 df = corpus.get_utterances_dataframe()
@@ -43,10 +45,6 @@ labeled = [(p[0], p[1], True) for p in in_context_pairs] + [(p[0], p[1], False) 
 pairs = pd.DataFrame(labeled, columns=["text_1", "text_2", "in_context"])
 shuffled = pairs.sample(frac=1)
 
-import pandas as pd
-import torch
-from sklearn.model_selection import train_test_split
-from transformers import BertTokenizer, BertForSequenceClassification, AdamW
 
 # Load data
 df = shuffled
