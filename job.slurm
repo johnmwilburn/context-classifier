@@ -7,6 +7,6 @@
 #SBATCH --mail-user=john.wilburn@my.utsa.edu
 #SBATCH --mail-type=ALL
 #SBATCH --output "output.txt"
-#SBATCH --partition "gpu025"
+#SBATCH --partition "gpu1v100"
 
 python3 main.py
