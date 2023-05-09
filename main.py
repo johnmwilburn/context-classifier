@@ -83,7 +83,7 @@ test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16)
 optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
 criterion = torch.nn.CrossEntropyLoss().to('cuda')
 
-for epoch in range(3): # increase range for training
+for epoch in range(50): # increase range for training
     model.train()
     for batch in train_loader:
         optimizer.zero_grad()
