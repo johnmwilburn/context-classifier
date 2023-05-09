@@ -83,6 +83,7 @@ train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16)
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
+criterion = torch.nn.CrossEntropyLoss().to('cuda')
 
 for epoch in range(3): # increase range for training
     model.train()
@@ -90,9 +91,9 @@ for epoch in range(3): # increase range for training
         optimizer.zero_grad()
         input_ids = batch['input_ids'].to('cuda')
         attention_mask = batch['attention_mask'].to('cuda')
-        labels = batch['labels'].to('cuda')
+        labels = batch['labels'].long().to('cuda')
         outputs = model(input_ids, attention_mask=attention_mask)
-        loss = outputs.loss
+        loss = criterion(outputs.logits, labels)
         loss.backward()
         optimizer.step()
 
