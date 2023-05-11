@@ -41,13 +41,13 @@ while len(out_context_pairs) < sample_size:
     out_context_pairs.append((in_context_pairs[i][0], in_context_pairs[j][1]))
 
 # Combine the in-context and out-of-context pairs into one dataframe and shuffle it
-labeled = [(p[0], p[1], True) for p in in_context_pairs] + [(p[0], p[1], False) for p in out_context_pairs]
+labeled = [(p[0], p[1], 1) for p in in_context_pairs] + [(p[0], p[1], 0) for p in out_context_pairs]
 pairs = pd.DataFrame(labeled, columns=["text_1", "text_2", "in_context"])
 shuffled = pairs.sample(frac=1)
 
 
 # Load data
-df = shuffled
+df = shuffled[:1000]
 
 # Split data into train and test sets
 train_df, test_df = train_test_split(df, test_size=0.2)
@@ -84,7 +84,9 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
 criterion = torch.nn.CrossEntropyLoss().to('cuda')
 
 for epoch in range(25): # increase range for training
+    print("Beginning epoch " + str(epoch + 1))
     model.train()
+    i = 0
     for batch in train_loader:
         optimizer.zero_grad()
         input_ids = batch['input_ids'].to('cuda')
@@ -94,6 +96,9 @@ for epoch in range(25): # increase range for training
         loss = criterion(outputs.logits, labels)
         loss.backward()
         optimizer.step()
+        if i % 100 == 0:
+            print(f'Epoch {epoch + 1} batch {i} loss: {loss.item():.2f}')
+        i += 1
 
     model.eval()
     correct_predictions = 0
