@@ -53,7 +53,7 @@ df = shuffled[:1000]
 train_df, test_df = train_test_split(df, test_size=0.2)
 
 # Tokenize data
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
+tokenizer = BertTokenizer.from_pretrained('bert-large-uncased', do_lower_case=True)
 
 train_encodings = tokenizer(train_df['text_1'].tolist(), train_df['text_2'].tolist(), truncation=True, padding=True)
 test_encodings = tokenizer(test_df['text_1'].tolist(), test_df['text_2'].tolist(), truncation=True, padding=True)
@@ -74,7 +74,7 @@ class CustomDataset(torch.utils.data.Dataset):
 train_dataset = CustomDataset(train_encodings, train_df['in_context'].tolist())
 test_dataset = CustomDataset(test_encodings, test_df['in_context'].tolist())
 
-model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=2)
+model = BertForSequenceClassification.from_pretrained('bert-large-uncased', num_labels=2)
 model.to('cuda')
 
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
