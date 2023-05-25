@@ -89,7 +89,7 @@ for epoch in range(25): # increase range for training
     i = 0
     for batch in train_loader:
         optimizer.zero_grad()
-        input_ids = batch['input_ids'#].to('cuda')
+        input_ids = batch['input_ids']#.to('cuda')
         attention_mask = batch['attention_mask']#.to('cuda')
         labels = batch['labels'].long()#.to('cuda')
         outputs = model(input_ids, attention_mask=attention_mask)
