@@ -75,13 +75,13 @@ train_dataset = CustomDataset(train_encodings, train_df['in_context'].tolist())
 test_dataset = CustomDataset(test_encodings, test_df['in_context'].tolist())
 
 model = BertForSequenceClassification.from_pretrained('bert-large-uncased', num_labels=2)
-model.to('cuda')
+#model.to('cuda')
 
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16)
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
-criterion = torch.nn.CrossEntropyLoss().to('cuda')
+criterion = torch.nn.CrossEntropyLoss()#.to('cuda')
 
 for epoch in range(25): # increase range for training
     print("Beginning epoch " + str(epoch + 1))
@@ -89,9 +89,9 @@ for epoch in range(25): # increase range for training
     i = 0
     for batch in train_loader:
         optimizer.zero_grad()
-        input_ids = batch['input_ids'].to('cuda')
-        attention_mask = batch['attention_mask'].to('cuda')
-        labels = batch['labels'].long().to('cuda')
+        input_ids = batch['input_ids'#].to('cuda')
+        attention_mask = batch['attention_mask']#.to('cuda')
+        labels = batch['labels'].long()#.to('cuda')
         outputs = model(input_ids, attention_mask=attention_mask)
         loss = criterion(outputs.logits, labels)
         loss.backward()
@@ -105,9 +105,9 @@ for epoch in range(25): # increase range for training
     total_predictions = 0
     for batch in test_loader:
         with torch.no_grad():
-            input_ids = batch['input_ids'].to('cuda')
-            attention_mask = batch['attention_mask'].to('cuda')
-            labels = batch['labels'].to('cuda')
+            input_ids = batch['input_ids']#.to('cuda')
+            attention_mask = batch['attention_mask']#.to('cuda')
+            labels = batch['labels']#.to('cuda')
             outputs = model(input_ids, attention_mask=attention_mask)
             predictions = torch.argmax(outputs.logits, dim=-1)
             correct_predictions += (predictions == labels).sum().item()
@@ -120,7 +120,7 @@ text_1 = "I am going to the store."
 text_2 = "I am going to the park."
 
 inputs = tokenizer(text_1, text_2, return_tensors='pt', truncation=True)
-outputs = model(**inputs.to('cuda'))
+outputs = model(**inputs) # .to('cuda')
 predictions = torch.argmax(outputs.logits).item()
 
 torch.save(model, 'model.pt')
